@@ -29,4 +29,5 @@ The fundamental kit of your application, which offers key components such as rep
    - SecurityKey Service
 - Helpers
   - Notification Helper (MVC)
-  - Export Excel  
+  - Export Excel
+  - RSA Encryption / Decryption
