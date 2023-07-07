@@ -1,0 +1,11 @@
+﻿global using FoundationKit.API.Example.Application.interfaces;
+global using FoundationKit.API.Example.Domain.Models;
+global using FoundationKit.API.Example.Domain.Persistence;
+global using FoundationKit.API.Example.Infraestructure.Services;
+global using FoundationKit.Domain.Models;
+global using FoundationKit.Domain.Persistence;
+global using FoundationKit.Repository.Interfaces;
+global using FoundationKit.Repository.Services;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations.Schema;
