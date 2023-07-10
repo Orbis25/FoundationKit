@@ -4,11 +4,12 @@
 
 The fundamental kit of your application, which offers key components such as repositories, validations, base models, and configurations.
 
-This library is separated in 3 components or nuggets:
+This library is separated in 4 components or nuggets:
 
 - `FoundationKit` - Contains all implementations from the library.
 - `FoundationKit.EntityFrameworkCore` - Contains the base DbContext and base models, configurations and access configuration for database.
 - `FoundationKit.Repository` - Contains the base repositories.
+- `FoundationKit.Extensions` - Contains the extensions for the library.
 
 [![Release to NuGet](https://github.com/Orbis25/FoundationKit/actions/workflows/release.yml/badge.svg)](https://github.com/Orbis25/FoundationKit/actions/workflows/release.yml)
 
@@ -50,8 +51,8 @@ This library is separated in 3 components or nuggets:
 - Extensions
   - Minimals api extensions
   - ICollection extensions
-  - Enum extensions
-    - GetDisplayName
+  - Enum extensions ✅
+    - [GetDisplayName](#getdisplayname) 
 - Documentation ✅
 
 # Documentation
@@ -141,4 +142,8 @@ Contains the `FoundationKitDbContext` class which inherits from `DbContext` and 
   
 - `SaveChangesAsync`: Override the `SaveChangesAsync` method to set the `CreatedAt` and `UpdateAt` properties of the models.
 
+## Extensions
 
+### `GetDisplayName`
+
+This extension allows us to obtain the name of the enum value based in the `[Display]` attribute if it exists, otherwise it returns the name of the enum based in your code.
