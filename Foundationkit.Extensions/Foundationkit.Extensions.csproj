@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>$(AssemblyName),Orbis25</Authors>
+		<Description>The fundamental kit of your application, which offers key components such as repositories, validations, base models, and configurations.</Description>
+		<PackageProjectUrl>https://github.com/Orbis25/FoundationKit</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Version>1.0.1</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\FoundationKit\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>
