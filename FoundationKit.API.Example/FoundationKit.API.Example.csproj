@@ -16,8 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FoundationKit.Domain\FoundationKit.Domain.csproj" />
-    <ProjectReference Include="..\FoundationKit.Repository\FoundationKit.Repository.csproj" />
+    <ProjectReference Include="..\FoundationKit\FoundationKit.csproj" />
   </ItemGroup>
 
 </Project>

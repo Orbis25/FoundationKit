@@ -33,12 +33,15 @@ This library is separated in 4 components or nuggets:
   - Base Model ✅
     - [BaseModel](#base-model)
   - Base Dto
+  - Paginate ✅
+    - [Paginate](#paginate)
   - Base Mappings
   - Base EF Configuration
   - Base Response
   - API key validation with swagger
   - Base SecurityApi key Model
-  - Base Controllers
+  - [Core API Controllers](#core-api-controllers)✅
+  - Core MVC Controllers
   - Base DbContext ✅
     - [FoundationKitDbContext](#base-dbcontext)
 - Services
@@ -52,7 +55,7 @@ This library is separated in 4 components or nuggets:
   - Minimals api extensions
   - ICollection extensions
   - Enum extensions ✅
-    - [GetDisplayName](#getdisplayname) 
+    - [GetDisplayName](#getdisplayname)
 - Documentation ✅
 
 # Documentation
@@ -114,32 +117,40 @@ app.MapPost("/api/person", async ([FromServices] IPersonService service,
 
 ## Configuration
 
-### Base Model 
+### Base Model
 
 is a base class named `BaseModel` that allows us to have a common structure in our models, it has the following properties:
 
 - `Id` - is a unique identifier for the model.
-  
 - `CreatedAt` - is the date of creation of the model.
-  
 - `UpdateAt` - is the date of the last update of the model.
-  
 - `CreatedAtStr` - is the date of creation of the model in string format. (dd/MM/yyyy hh:mm:ss)
-  
 - `UpdateAtStr` - is the date of the last update of the model in string format. (dd/MM/yyyy hh:mm:ss)
-  
 - `IsDeleted` - is a flag that indicates if the model is deleted.
-  
 - `CreatedBy` - is the user who created the model.
-  
 - `UpdatedBy` - is the user who updated the model.
+
+### Paginate
+
+is a class named `Paginate` that allows us to paginate a list of models; please see the paginate class.
+
+### Core API Controllers
+
+Contains the `CoreApiController` class which inherits from `ControllerBase` and contains the next characteristics:
+
+- `GetByIdAsync` - is a method that allows us to obtain a model by its id.
+- `GetAllPaginatedAsync` - is a method that allows us to obtain all the models paginated or not please see [Paginate](#paginate).
+- `AddAsync` - is a method that allows us to create a model.
+- `UpdateAsync` - is a method that allows us to update a model.
+- `DeleteAsync` - is a method that allows up to update a model with the `IsDeleted` flag in true.
+
+Example in `FoundationKit.API.Example/Controllers/PersonController.cs`
 
 ### Base DbContext
 
 Contains the `FoundationKitDbContext` class which inherits from `DbContext` and contains the next characteristics:
 
 - `SaveChanges`: Override the `SaveChanges` method to set the `CreatedAt` and `UpdateAt` properties of the models.
-  
 - `SaveChangesAsync`: Override the `SaveChangesAsync` method to set the `CreatedAt` and `UpdateAt` properties of the models.
 
 ## Extensions

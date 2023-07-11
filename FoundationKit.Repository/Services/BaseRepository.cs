@@ -30,7 +30,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         }
     }
 
-    public virtual async Task<TModel> Create(TModel model, CancellationToken cancellationToken = default)
+    public virtual async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default)
     {
         _context.Set<TModel>().Add(model);
 
@@ -61,13 +61,22 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         return results;
     }
 
-    public virtual async Task<PaginationResult<TModel>> GetPaginatedList(Paginate paginate,
+    public virtual async Task<PaginationResult<TModel>> GetPaginatedListAsync(Paginate paginate,
         Expression<Func<TModel, bool>>? expression = default,
         Expression<Func<TModel, object>>? ordered = default,
         CancellationToken cancellationToken = default,
         params Expression<Func<TModel, object>>[] includes)
     {
         var results = GetAll(expression, paginate.OrderByDesc, ordered, includes);
+
+        if (paginate.NoPaginate)
+        {
+            return new()
+            {
+                Results = await results.AsNoTracking().ToListAsync(cancellationToken)
+            };
+        }
+
         var total = results.Count();
         var pages = (int)Math.Ceiling((decimal)total / paginate.Qyt);
 
@@ -84,16 +93,16 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
 
     }
 
-    public virtual async Task<IEnumerable<TModel>> GetList(bool orderDesc = true, 
+    public virtual async Task<IEnumerable<TModel>> GetListAsync(bool orderDesc = true,
         Expression<Func<TModel, bool>>? expression = null,
-        Expression<Func<TModel, object>>? ordered = null, 
-        CancellationToken cancellationToken = default, 
+        Expression<Func<TModel, object>>? ordered = null,
+        CancellationToken cancellationToken = default,
         params Expression<Func<TModel, object>>[] includes)
         => await GetAll(expression, orderDesc, ordered, includes).ToListAsync(cancellationToken);
 
-    public virtual async Task<TModel?> Update(TModel model, CancellationToken cancellationToken = default)
+    public virtual async Task<TModel?> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
     {
-        var entity = await GetById(model.Id, true);
+        var entity = await GetByIdAsync(model.Id, true);
 
         if (entity == null)
             return default;
@@ -108,7 +117,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         return model;
     }
 
-    public virtual async Task<TModel?> GetById(Guid id,
+    public virtual async Task<TModel?> GetByIdAsync(Guid id,
         bool asNotTraking = false,
         CancellationToken cancellationToken = default,
         params Expression<Func<TModel, object>>[] includes)
@@ -121,9 +130,9 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
 
     }
 
-    public virtual async Task<bool> SoftRemove(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> SoftRemoveAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await GetById(id, true);
+        var entity = await GetByIdAsync(id, true);
 
         if (entity == null) return false;
 
@@ -137,9 +146,9 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
 
     }
 
-    public virtual async Task<bool> Remove(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await GetById(id, true);
+        var entity = await GetByIdAsync(id, true);
 
         if (entity == null) return false;
 
@@ -150,7 +159,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         return true;
     }
 
-    public async Task<int> Count(CancellationToken cancellationToken = default, params Expression<Func<TModel, bool>>[] expression)
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default, params Expression<Func<TModel, bool>>[] expression)
     {
         var result = _context.Set<TModel>()
             .AsQueryable();
@@ -160,7 +169,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         return await result.CountAsync(cancellationToken);
     }
 
-    public async Task<bool> Exist(Expression<Func<TModel, bool>>? expression = default, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistAsync(Expression<Func<TModel, bool>>? expression = default, CancellationToken cancellationToken = default)
     {
         var result = _context.Set<TModel>();
 

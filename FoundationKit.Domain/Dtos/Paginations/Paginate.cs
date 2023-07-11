@@ -15,12 +15,6 @@ public class Paginate
     public int Qyt { get; set; } = 10;
 
     /// <summary>
-    /// Order by
-    /// </summary>
-    [FromQuery]
-    public string? OrderBy { get; set; } = null;
-
-    /// <summary>
     /// flag order decs or asc
     /// </summary>
     /// 
@@ -28,8 +22,9 @@ public class Paginate
     public bool OrderByDesc { get; set; }
 
     /// <summary>
-    /// param to filter
+    /// indicate if the results is paginated
     /// </summary>
+
     [FromQuery]
-    public string? Query { get; set; }
+    public bool NoPaginate { get; set; }
 }

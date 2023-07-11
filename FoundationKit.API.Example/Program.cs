@@ -2,6 +2,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -29,7 +30,7 @@ app.MapPost("/api/person", async ([FromServices] IPersonService service,
     Person person,
     CancellationToken cancellationToken) =>
 {
-    return await service.Create(person, cancellationToken);
+    return await service.CreateAsync(person, cancellationToken);
 })
 .WithName("add");
 
@@ -37,7 +38,7 @@ app.MapPut("/api/person", async ([FromServices] IPersonService service,
     Person person,
     CancellationToken cancellationToken) =>
 {
-    return await service.Update(person, cancellationToken);
+    return await service.UpdateAsync(person, cancellationToken);
 })
 .WithName("update");
 
@@ -45,7 +46,7 @@ app.MapGet("/api/person", async (
     [FromServices] IPersonService service,
     CancellationToken cancellationToken) =>
 {
-    return await service.GetList(cancellationToken: cancellationToken);
+    return await service.GetListAsync(cancellationToken: cancellationToken);
 })
 .WithName("get all");
 
@@ -56,8 +57,11 @@ app.MapGet("/api/person/{id}", async (
     CancellationToken cancellationToken
     ) =>
 {
-    return await service.GetById(id, cancellationToken: cancellationToken);
+    return await service.GetByIdAsync(id, cancellationToken: cancellationToken);
 })
 .WithName("get one");
+
+
+app.MapControllers();
 
 app.Run();
