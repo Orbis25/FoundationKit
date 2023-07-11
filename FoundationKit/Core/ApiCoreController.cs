@@ -54,7 +54,7 @@ public abstract class ApiCoreController<TModel, TService> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpDelete("{id:guid}")]
-    public virtual async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await _service.SoftRemoveAsync(id, cancellationToken);
 
@@ -71,7 +71,7 @@ public abstract class ApiCoreController<TModel, TService> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    public virtual async Task<IActionResult> GetAll([FromQuery] Paginate paginate,
+    public virtual async Task<IActionResult> GetAllPaginatedAsync([FromQuery] Paginate paginate,
         CancellationToken cancellationToken = default)
     {
         return Ok(await _service.GetPaginatedListAsync(paginate));
@@ -85,7 +85,7 @@ public abstract class ApiCoreController<TModel, TService> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public virtual async Task<IActionResult> Update(Guid id,TModel model,
+    public virtual async Task<IActionResult> UpdateAsync(Guid id,TModel model,
         CancellationToken cancellationToken = default)
     {
         var exist = await _service.ExistAsync(x => x.Id == model.Id, cancellationToken);
