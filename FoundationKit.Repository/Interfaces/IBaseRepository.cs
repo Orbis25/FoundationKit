@@ -15,7 +15,7 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <param name="includes">Represent a list of includes can you use of class for create a joins in the db</param>
     /// <returns>A PaginationResult<TDtoModel> </returns>
-    Task<PaginationResult<TModel>> GetPaginatedList(Paginate paginate,
+    Task<PaginationResult<TModel>> GetPaginatedListAsync(Paginate paginate,
         Expression<Func<TModel, bool>>? expression = default,
         Expression<Func<TModel, object>>? ordered = default,
         CancellationToken cancellationToken = default,
@@ -30,7 +30,7 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <param name="includes">Represent a list of includes can you use of class for create a joins in the db</param>
     /// <returns><IEnumerable<TDtoModel>></returns>
-    Task<IEnumerable<TModel>> GetList(
+    Task<IEnumerable<TModel>> GetListAsync(
         bool orderDesc = true,
         Expression<Func<TModel, bool>>? expression = default,
         Expression<Func<TModel, object>>? ordered = default,
@@ -57,7 +57,7 @@ public interface IBaseRepository<TModel>
     /// <param name="model">Represent the class to create children from <c>TInputModel</c></param>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
-    Task<TModel> Create(TModel model, CancellationToken cancellationToken = default);
+    Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Update a Entity
@@ -65,7 +65,7 @@ public interface IBaseRepository<TModel>
     /// <param name="model">Represent the class to create children from <c>TEditModel</c></param>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
-    Task<TModel?> Update(TModel model, CancellationToken cancellationToken = default);
+    Task<TModel?> UpdateAsync(TModel model, CancellationToken cancellationToken = default);
 
 
     /// <summary>
@@ -76,7 +76,7 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <param name="includes">Represent a list of includes can you use of class for create a joins in the db</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
-    Task<TModel?> GetById(Guid id, bool asNotTraking = false,
+    Task<TModel?> GetByIdAsync(Guid id, bool asNotTraking = false,
         CancellationToken cancellationToken = default,
         params Expression<Func<TModel, object>>[] includes);
 
@@ -87,7 +87,7 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>bool</returns>
 
-    Task<bool> SoftRemove(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> SoftRemoveAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Delete a entity
@@ -95,7 +95,7 @@ public interface IBaseRepository<TModel>
     /// <param name="id">Is the identification unique of entity or primary key</param>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>bool</returns>
-    Task<bool> Remove(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Verify if the entity exist
@@ -103,7 +103,7 @@ public interface IBaseRepository<TModel>
     /// <param name="expression">Can use by filter data for any property of class</param>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>bool</returns>
-    Task<bool> Exist(Expression<Func<TModel, bool>>? expression = default, CancellationToken cancellationToken = default);
+    Task<bool> ExistAsync(Expression<Func<TModel, bool>>? expression = default, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Count the entity in the db
@@ -111,7 +111,7 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <param name="expression">List of expressions can use by filter data for any property of class</param>
     /// <returns></returns>
-    Task<int> Count(
+    Task<int> CountAsync(
         CancellationToken cancellationToken = default,
          params Expression<Func<TModel, bool>>[] expression);
 }
