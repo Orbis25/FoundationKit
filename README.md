@@ -50,7 +50,8 @@ This library is separated in 4 components or nuggets:
 - Helpers
   - Notification Helper (MVC)
   - Export Excel
-  - RSA Encryption / Decryption
+  - RSA Encryption / Decryption,
+  - Format amounts
 - Extensions
   - Minimals api extensions
   - ICollection extensions
