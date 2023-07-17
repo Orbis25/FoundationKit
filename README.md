@@ -56,6 +56,7 @@ This library is separated in 4 components or nuggets:
   - Export Excel
   - RSA Encryption / Decryption,
   - Format amounts
+  - MD5 HASH
 - Extensions
   - Minimals api extensions
   - ICollection extensions
