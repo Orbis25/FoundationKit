@@ -60,7 +60,9 @@ This library is separated in 4 components or nuggets:
   - Minimals api extensions
   - ICollection extensions
   - Enum extensions ✅
-    - [GetDisplayName](#getdisplayname)
+    - [GetDisplayName](#getdisplayname)   
+ - Others
+    - Cookie based auth
 - Documentation ✅
 
 # Documentation
