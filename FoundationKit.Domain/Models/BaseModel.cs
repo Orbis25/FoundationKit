@@ -11,7 +11,7 @@ public abstract class BaseModel
     public string CreatedAtStr => CreatedAt.ToString("dd/MM/yyyy hh:mm:ss");
 
     [NotMapped]
-    public string UpdateAtStr => CreatedAt.ToString("dd/MM/yyyy hh:mm:ss");
+    public string UpdateAtStr => UpdateAt != null ? UpdateAt.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
 
     public virtual bool IsDeleted { get; set; }
 

@@ -1,4 +1,11 @@
-﻿global using FoundationKit.Domain.Dtos.Paginations;
+﻿global using FoundationKit.Core.interfaces;
+global using FoundationKit.Domain.Dtos.Inputs;
+global using FoundationKit.Domain.Dtos.Outputs;
+global using FoundationKit.Domain.Dtos.Paginations;
 global using FoundationKit.Domain.Models;
 global using FoundationKit.Repository.Interfaces;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.DependencyInjection;
+global using System.Reflection;
