@@ -11,6 +11,17 @@ This library is separated in 4 components or nuggets:
 - `FoundationKit.Repository` - Contains the base repositories.
 - `FoundationKit.Extensions` - Contains the extensions for the library.
 
+`Configuration in program.cs`:
+
+```csharp
+//this configuration is necessary if you want use IMapRepository with IdentityDbContext
+builder.Services.AddFoundationKitIdentity<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
+
+//this configuration is necessary if you want use IMapRepository without IdentityDbContext
+builder.Services.AddFoundationKit(Assembly.GetExecutingAssembly());
+
+```
+
 [![Release to NuGet](https://github.com/Orbis25/FoundationKit/actions/workflows/release.yml/badge.svg)](https://github.com/Orbis25/FoundationKit/actions/workflows/release.yml)
 
 ## [Roadmap]
@@ -18,10 +29,14 @@ This library is separated in 4 components or nuggets:
 `Only mark items are completed`
 
 - [Repository Pattern](#repository-pattern) ✅
-- Repository Pattern with Automapper
+- Repository Pattern with Automapper ✅
 - Filter repository
 - Firebase Repository
 - AMQP RABBIT Integration
+- Services
+  - NationalityService
+  - StateService
+  - CountryService
 - Validation
   - DPI
   - DNI
@@ -32,11 +47,11 @@ This library is separated in 4 components or nuggets:
 - Configuration
   - Base Model ✅
     - [BaseModel](#base-model)
-  - Base Dto
+  - Base Dto ✅
   - Paginate ✅
     - [Paginate](#paginate)
   - Base Mappings
-  - Base EF Configuration
+  - Base EF Configuration ✅
   - Base Response
   - API key validation with swagger
   - Base SecurityApi key Model
@@ -50,12 +65,16 @@ This library is separated in 4 components or nuggets:
 - Helpers
   - Notification Helper (MVC)
   - Export Excel
-  - RSA Encryption / Decryption
+  - RSA Encryption / Decryption,
+  - Format amounts
+  - MD5 HASH
 - Extensions
   - Minimals api extensions
   - ICollection extensions
   - Enum extensions ✅
-    - [GetDisplayName](#getdisplayname)
+    - [GetDisplayName](#getdisplayname)   
+ - Others
+    - Cookie based auth
 - Documentation ✅
 
 # Documentation

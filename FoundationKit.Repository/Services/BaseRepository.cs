@@ -132,7 +132,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
 
     public virtual async Task<bool> SoftRemoveAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await GetByIdAsync(id, true);
+        var entity = await GetByIdAsync(id);
 
         if (entity == null) return false;
 

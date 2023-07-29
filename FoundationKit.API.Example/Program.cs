@@ -1,3 +1,6 @@
+using FoundationKit.Extensions;
+using System.Reflection;
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,11 +11,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//foundation kit config
+builder.Services.AddFoundationKitIdentity<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
+
+
 //database with postgres
-builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
+builder.Services.AddDbContext<ApplicationIdentityDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
+
+//database without identity
+//builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
 
 //service
-builder.Services.AddScoped<IPersonService, PersonService>();
+//builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IPersonMapService, PersonMapService>();
 
 var app = builder.Build();
 
