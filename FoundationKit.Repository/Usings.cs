@@ -3,3 +3,7 @@ global using FoundationKit.Domain.Models;
 global using System.Linq.Expressions;
 global using FoundationKit.Repository.Interfaces;
 global using Microsoft.EntityFrameworkCore;
+global using FoundationKit.Domain.Dtos.Inputs;
+global using FoundationKit.Domain.Dtos.Outputs;
+global using AutoMapper.QueryableExtensions;
+global using AutoMapper;

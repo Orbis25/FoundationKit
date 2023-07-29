@@ -1,10 +1,11 @@
-﻿using FoundationKit.Core;
+﻿using FoundationKit.API.Example.Domain.Mappings;
+using FoundationKit.Core;
 
 namespace FoundationKit.API.Example.Controllers;
 
-public class PeopleController : ApiCoreController<Person, IPersonService>
+public class PeopleController : ApiMapController<IPersonMapService, PersonDto, PersonInput, PersonEdit>
 {
-    public PeopleController(IPersonService service) : base(service)
+    public PeopleController(IPersonMapService service) : base(service)
     {
     }
 }
