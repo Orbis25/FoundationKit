@@ -14,7 +14,7 @@ public abstract class FoundationKitIdentityDbContext<TUser> :
             switch (entity.State)
             {
                 case EntityState.Modified:
-                    entity.Entity.UpdateAt = DateTime.Now;
+                    entity.Entity.UpdatedAt = DateTime.Now;
                     break;
                 case EntityState.Added:
                     entity.Entity.CreatedAt = DateTime.Now;
@@ -32,7 +32,7 @@ public abstract class FoundationKitIdentityDbContext<TUser> :
             switch (entity.State)
             {
                 case EntityState.Modified:
-                    entity.Entity.UpdateAt = DateTime.Now;
+                    entity.Entity.UpdatedAt = DateTime.Now;
                     break;
                 case EntityState.Added:
                     entity.Entity.CreatedAt = DateTime.Now;
