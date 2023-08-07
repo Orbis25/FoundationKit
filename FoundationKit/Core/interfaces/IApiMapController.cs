@@ -23,7 +23,7 @@ public interface IApiMapController<TInputModel, TEditModel>
     /// <typeparam name="editModel">Represent the class children of BaseEditModel </typeparam>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>200 ok</returns>
-    Task<IActionResult> Update(TEditModel editModel, CancellationToken cancellationToken = default);
+    Task<IActionResult> Update(Guid id,TEditModel editModel, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Endpoint to apply SoftRemove a entity
