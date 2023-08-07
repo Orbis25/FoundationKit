@@ -4,6 +4,7 @@ namespace FoundationKit.Domain.Dtos.Inputs;
 
 public abstract class BaseEdit
 {
+    [JsonIgnore]
     public virtual Guid Id { get; set; }
     [JsonIgnore]
     public virtual DateTime? UpdateAt { get; set; }

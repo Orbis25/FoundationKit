@@ -71,14 +71,15 @@ public abstract class ApiMapController<TService, TDtoModel, TInputModel, TEditMo
     /// <param name="editModel"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPut]
-    public virtual async Task<IActionResult> Update(TEditModel editModel,
+    [HttpPut("{id}")]
+    public virtual async Task<IActionResult> Update(Guid id,TEditModel editModel,
         CancellationToken cancellationToken = default)
     {
-        var exist = await _service.Exist(x => x.Id == editModel.Id, cancellationToken);
+        var exist = await _service.Exist(x => x.Id == id, cancellationToken);
         if (!exist)
             return NotFound(exist);
 
+        editModel.Id = id;
         var response = await _service.Update(editModel, cancellationToken);
 
         if (response == null) return BadRequest(response);

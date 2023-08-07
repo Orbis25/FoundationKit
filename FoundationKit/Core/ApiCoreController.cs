@@ -92,6 +92,7 @@ public abstract class ApiCoreController<TModel, TService> : ControllerBase
         if (!exist)
             return NotFound(exist);
 
+        model.Id = id;
         var response = await _service.UpdateAsync(model, cancellationToken);
 
         if (response == null) return BadRequest(response);

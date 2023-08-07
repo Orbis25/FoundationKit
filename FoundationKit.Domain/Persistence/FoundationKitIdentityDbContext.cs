@@ -29,7 +29,7 @@ public abstract class FoundationKitIdentityDbContext<TUser> :
     {
         foreach (var entity in ChangeTracker.Entries<BaseModel>())
         {
-            switch (entity.State)
+            switch (entity.State)   
             {
                 case EntityState.Modified:
                     entity.Entity.UpdatedAt = DateTime.Now;
