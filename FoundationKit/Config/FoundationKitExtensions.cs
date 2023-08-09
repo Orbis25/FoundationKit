@@ -1,7 +1,4 @@
-﻿using FoundationKit.Domain.Persistence;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-namespace FoundationKit.Extensions;
+﻿namespace FoundationKit.Extensions;
 
 public static class FoundationKitExtensions
 {
@@ -32,7 +29,8 @@ public static class FoundationKitExtensions
         services.AddAutoMapper(assembly);
         services.AddIdentityCore<T>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<TDbContext>();
+            .AddEntityFrameworkStores<TDbContext>()
+            .AddSignInManager<SignInManager<T>>();
 
         return services;
     }
