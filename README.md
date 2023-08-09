@@ -72,9 +72,12 @@ builder.Services.AddFoundationKit(Assembly.GetExecutingAssembly());
   - Minimals api extensions
   - ICollection extensions
   - Enum extensions ✅
-    - [GetDisplayName](#getdisplayname)   
+    - [GetAttribute](#GetAttribute)   
  - Others
     - Cookie based auth
+    - Base response
+    - Serilog
+    - IApplicationContext
 - Documentation ✅
 
 # Documentation
@@ -174,6 +177,6 @@ Contains the `FoundationKitDbContext` class which inherits from `DbContext` and 
 
 ## Extensions
 
-### `GetDisplayName`
+### `GetAttribute`
 
 This extension allows us to obtain the name of the enum value based in the `[Display]` attribute if it exists, otherwise it returns the name of the enum based in your code.
