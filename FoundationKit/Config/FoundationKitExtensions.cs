@@ -27,10 +27,11 @@ public static class FoundationKitExtensions
         where TDbContext : IdentityDbContext<T>
     {
         services.AddAutoMapper(assembly);
-        services.AddIdentityCore<T>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<TDbContext>()
-            .AddSignInManager<SignInManager<T>>();
+
+        services.AddIdentity<T, IdentityRole>()
+               .AddRoles<IdentityRole>()
+               .AddEntityFrameworkStores<TDbContext>()
+               .AddSignInManager<SignInManager<T>>();
 
         return services;
     }
