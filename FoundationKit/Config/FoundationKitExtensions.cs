@@ -31,7 +31,8 @@ public static class FoundationKitExtensions
         services.AddIdentity<T, IdentityRole>()
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<TDbContext>()
-               .AddSignInManager<SignInManager<T>>();
+               .AddSignInManager<SignInManager<T>>()
+               .AddDefaultTokenProviders();
 
         return services;
     }
