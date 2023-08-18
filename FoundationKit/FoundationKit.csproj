@@ -7,12 +7,12 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>FoundationKit</Title>
 		<Authors>$(AssemblyName),Orbis25</Authors>
-		<Description>The fundamental kit of your application, which offers key components such as repositories, validations, base models, and configurations.</Description>
+		<Description>The fundamental kit of your application, which offers key components such as repositories, validations,base controllers, base models, and configurations.</Description>
 		<PackageProjectUrl>https://github.com/Orbis25/FoundationKit</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>2.0.5</Version>
+		<Version>2.0.6</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
