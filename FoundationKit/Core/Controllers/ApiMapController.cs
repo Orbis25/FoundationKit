@@ -1,4 +1,4 @@
-﻿namespace FoundationKit.Core;
+﻿namespace FoundationKit.Core.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -72,7 +72,7 @@ public abstract class ApiMapController<TService, TDtoModel, TInputModel, TEditMo
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public virtual async Task<IActionResult> Update(Guid id,TEditModel editModel,
+    public virtual async Task<IActionResult> Update(Guid id, TEditModel editModel,
         CancellationToken cancellationToken = default)
     {
         var exist = await _service.Exist(x => x.Id == id, cancellationToken);
