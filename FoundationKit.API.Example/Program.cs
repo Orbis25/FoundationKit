@@ -12,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //foundation kit config
-builder.Services.AddFoundationKitIdentity<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
+builder.Services.AddFoundationKitIdentityWithMapper<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
 
 
 //database with postgres
