@@ -48,7 +48,7 @@ public interface IMvcCoreController<Model>
     /// <param name="id">primary key</param>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>200 ok</returns>
-    Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken = default);
+    Task<IActionResult> Update(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Send a alert from sweetalert2

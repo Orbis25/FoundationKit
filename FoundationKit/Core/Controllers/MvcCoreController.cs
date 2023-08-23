@@ -38,8 +38,8 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost("{id:guid}")]
-    public virtual async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await _service.SoftRemoveAsync(id, cancellationToken);
 
@@ -64,13 +64,13 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
 
 
     /// <summary>
-    /// Get a entity
+    /// Get a entity for update
     /// </summary>
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpGet("{id:guid}")]
-    public virtual async Task<IActionResult> GetById(Guid id,
+    [HttpGet]
+    public virtual async Task<IActionResult> Update(Guid id,
         CancellationToken cancellationToken = default)
     {
         var response = await _service.GetByIdAsync(id, cancellationToken: cancellationToken);
@@ -94,7 +94,7 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
         CancellationToken cancellationToken = default)
     {
         if (!ModelState.IsValid)
-            return View(nameof(GetById), editModel);
+            return View(nameof(Update), editModel);
 
         var exist = await _service.ExistAsync(x => x.Id == editModel.Id, cancellationToken);
         if (!exist)
@@ -109,7 +109,7 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
         {
             //send notification
             ShowAlert("Error", MvcCoreNotification.Error);
-            return View(nameof(GetById), editModel);
+            return View(nameof(Update), editModel);
         }
 
         ShowAlert("Success");

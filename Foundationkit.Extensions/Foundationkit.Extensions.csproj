@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>2.0.7</Version>
+		<Version>2.1.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
