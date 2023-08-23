@@ -1,4 +1,4 @@
-﻿namespace FoundationKit.Core;
+﻿namespace FoundationKit.Core.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -39,7 +39,7 @@ public abstract class ApiCoreController<TModel, TService> : ControllerBase
     public virtual async Task<IActionResult> AddAsync(TModel model,
         CancellationToken cancellationToken = default)
     {
-        var response  = await _service.CreateAsync(model, cancellationToken: cancellationToken);
+        var response = await _service.CreateAsync(model, cancellationToken: cancellationToken);
 
         if (response == null)
             return BadRequest("Error saving data to database");
@@ -85,7 +85,7 @@ public abstract class ApiCoreController<TModel, TService> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public virtual async Task<IActionResult> UpdateAsync(Guid id,TModel model,
+    public virtual async Task<IActionResult> UpdateAsync(Guid id, TModel model,
         CancellationToken cancellationToken = default)
     {
         var exist = await _service.ExistAsync(x => x.Id == model.Id, cancellationToken);

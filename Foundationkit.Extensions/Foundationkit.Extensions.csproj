@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>2.0.6</Version>
+		<Version>2.0.7</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,6 +23,14 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\FoundationKit.Domain\FoundationKit.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

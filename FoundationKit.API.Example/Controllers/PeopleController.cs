@@ -1,5 +1,5 @@
 ﻿using FoundationKit.API.Example.Domain.Mappings;
-using FoundationKit.Core;
+using FoundationKit.Core.Controllers;
 
 namespace FoundationKit.API.Example.Controllers;
 
