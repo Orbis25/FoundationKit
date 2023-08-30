@@ -27,4 +27,10 @@ public class Paginate
 
     [FromQuery]
     public bool NoPaginate { get; set; }
+
+    /// <summary>
+    /// Query for search you need implement this in your code
+    /// </summary>
+    [FromQuery]
+    public string? Query { get; set; }
 }

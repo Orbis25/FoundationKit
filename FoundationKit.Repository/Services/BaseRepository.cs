@@ -80,7 +80,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         var total = results.Count();
         var pages = (int)Math.Ceiling((decimal)total / paginate.Qyt);
 
-        results = results.Skip((paginate.Page - 1) * paginate.Qyt).Take(paginate.Qyt);
+        results = results.Skip((paginate.Page) * paginate.Qyt).Take(paginate.Qyt);
 
         return new PaginationResult<TModel>
         {
