@@ -118,7 +118,7 @@ public abstract class MapRepository<TContext, TEntity, TInputModel, TEditModel, 
         params Expression<Func<TDtoModel, object>>[] includes)
         => await GetAll(expression, orderDesc, ordered, includes).ToListAsync(cancellationToken);
 
-    public virtual async Task<TDtoModel?> Update(TEditModel model, bool verifyEntity = true, CancellationToken cancellationToken = default)
+    public virtual async Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default, bool verifyEntity = true)
     {
 
         if (verifyEntity)

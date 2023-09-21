@@ -116,7 +116,7 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         params Expression<Func<TModel, object>>[] includes)
         => await GetAll(expression, orderDesc, ordered, includes).ToListAsync(cancellationToken);
 
-    public virtual async Task<TModel?> UpdateAsync(TModel model, bool verifyEntity = true, CancellationToken cancellationToken = default)
+    public virtual async Task<TModel?> UpdateAsync(TModel model, CancellationToken cancellationToken = default, bool verifyEntity = true)
     {
         if (verifyEntity)
         {

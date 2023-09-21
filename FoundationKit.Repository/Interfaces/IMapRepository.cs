@@ -67,10 +67,10 @@ public interface IMapRepository<TInputModel, TEditModel, TDtoModel>
     /// Update a Entity
     /// </summary>
     /// <param name="model">Represent the class to create children from <c>TEditModel</c></param>
-    /// <param name="verifyEntity">flag indating if find the entity or omit the find</param>
     /// <param name="cancellationToken">cancellationToken</param>
+    /// <param name="verifyEntity">flag indating if find the entity or omit the find</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
-    Task<TDtoModel?> Update(TEditModel model, bool verifyEntity = true, CancellationToken cancellationToken = default);
+    Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default, bool verifyEntity = true);
 
 
     /// <summary>
