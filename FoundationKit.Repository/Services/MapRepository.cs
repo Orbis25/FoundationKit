@@ -39,6 +39,22 @@ public abstract class MapRepository<TContext, TEntity, TInputModel, TEditModel, 
         }
     }
 
+    public async Task<string?> CommitAndResultAsync(CancellationToken cancellationToken = default)
+    {
+        using var transaction = _context.Database.BeginTransaction();
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            return default;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return (ex.GetBaseException().Message);
+        }
+    }
+
     public virtual async Task<TDtoModel?> Create(TInputModel model, CancellationToken cancellationToken = default)
     {
         var _model = _mapper.Map<TInputModel, TEntity>(model);
@@ -102,15 +118,19 @@ public abstract class MapRepository<TContext, TEntity, TInputModel, TEditModel, 
         params Expression<Func<TDtoModel, object>>[] includes)
         => await GetAll(expression, orderDesc, ordered, includes).ToListAsync(cancellationToken);
 
-    public virtual async Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default)
+    public virtual async Task<TDtoModel?> Update(TEditModel model, bool verifyEntity = true, CancellationToken cancellationToken = default)
     {
-        var entity = await GetById(model.Id, true);
 
-        if (entity == null)
-            return default;
+        if (verifyEntity)
+        {
+            var entity = await GetById(model.Id, true);
 
-        model.CreatedBy = entity.CreatedBy;
-        model.CreatedAt = entity.CreatedAt;
+            if (entity == null)
+                return default;
+
+            model.CreatedBy = entity.CreatedBy;
+            model.CreatedAt = entity.CreatedAt;
+        }
 
         var _model = _mapper.Map<TEditModel, TEntity>(model);
         _context.Set<TEntity>().Update(_model);

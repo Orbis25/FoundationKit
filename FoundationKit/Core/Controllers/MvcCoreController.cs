@@ -5,6 +5,12 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
     where TService : IBaseRepository<TModel>
 {
     private readonly TService _service;
+
+    protected virtual string CreateSuccess { get; set; } = "Created Success";
+    protected virtual string CreateError { get; set; } = "Error creating";
+    protected virtual string UpdateSuccess { get; set; } = "Updated Seccess";
+    protected virtual string UpdateError { get; set; } = "Error updating";
+
     public MvcCoreController(TService service)
     {
         _service = service;
@@ -23,11 +29,11 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
 
         if (result == null)
         {
-            ShowAlert("Error", MvcCoreNotification.Error);
+            ShowAlert(CreateError, MvcCoreNotification.Error);
             return View(inputModel);
         }
 
-        ShowAlert("Success");
+        ShowAlert(CreateSuccess);
 
         return RedirectToAction(nameof(Index));
     }
@@ -108,11 +114,11 @@ public abstract class MvcCoreController<TModel, TService> : Controller, IMvcCore
         if (response == null)
         {
             //send notification
-            ShowAlert("Error", MvcCoreNotification.Error);
+            ShowAlert(UpdateError, MvcCoreNotification.Error);
             return View(nameof(Update), editModel);
         }
 
-        ShowAlert("Success");
+        ShowAlert(UpdateSuccess);
         return RedirectToAction(nameof(Index));
     }
 

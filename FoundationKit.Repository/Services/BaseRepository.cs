@@ -30,6 +30,22 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         }
     }
 
+    public async Task<string?> CommitAndResultAsync(CancellationToken cancellationToken = default)
+    {
+        using var transaction = _context.Database.BeginTransaction();
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            return default;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return (ex.GetBaseException().Message);
+        }
+    }
+
     public virtual async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default)
     {
         _context.Set<TModel>().Add(model);
@@ -100,15 +116,18 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         params Expression<Func<TModel, object>>[] includes)
         => await GetAll(expression, orderDesc, ordered, includes).ToListAsync(cancellationToken);
 
-    public virtual async Task<TModel?> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
+    public virtual async Task<TModel?> UpdateAsync(TModel model, bool verifyEntity = true, CancellationToken cancellationToken = default)
     {
-        var entity = await GetByIdAsync(model.Id, true);
+        if (verifyEntity)
+        {
+            var entity = await GetByIdAsync(model.Id, true);
 
-        if (entity == null)
-            return default;
+            if (entity == null)
+                return default;
 
-        model.CreatedBy = entity.CreatedBy;
-        model.CreatedAt = entity.CreatedAt;
+            model.CreatedBy = entity.CreatedBy;
+            model.CreatedAt = entity.CreatedAt;
+        }
 
         _context.Set<TModel>().Update(model);
 
