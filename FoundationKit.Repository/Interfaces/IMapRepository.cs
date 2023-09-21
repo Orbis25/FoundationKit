@@ -67,9 +67,10 @@ public interface IMapRepository<TInputModel, TEditModel, TDtoModel>
     /// Update a Entity
     /// </summary>
     /// <param name="model">Represent the class to create children from <c>TEditModel</c></param>
+    /// <param name="verifyEntity">flag indating if find the entity or omit the find</param>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
-    Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default);
+    Task<TDtoModel?> Update(TEditModel model, bool verifyEntity = true, CancellationToken cancellationToken = default);
 
 
     /// <summary>
@@ -118,4 +119,12 @@ public interface IMapRepository<TInputModel, TEditModel, TDtoModel>
     Task<int> Count(
         CancellationToken cancellationToken = default,
          params Expression<Func<TDtoModel, bool>>[] expression);
+
+    /// <summary>
+    /// Commit transaction and response null if is correct and response a string if have any error
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<string?> CommitAndResultAsync(CancellationToken cancellationToken = default);
+
 }
