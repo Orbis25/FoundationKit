@@ -212,4 +212,11 @@ public abstract class MapRepository<TContext, TEntity, TInputModel, TEditModel, 
 
         return await result.AnyAsync(expression, cancellationToken);
     }
+
+    public Task<TDtoModel?> GetOneAsync(Expression<Func<TDtoModel, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return _context.Set<TEntity>().ProjectTo<TDtoModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(expression, cancellationToken);
+    }
+
+    public Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default) => Update(model, cancellationToken, default);
 }

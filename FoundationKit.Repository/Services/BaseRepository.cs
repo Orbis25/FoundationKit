@@ -106,7 +106,6 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
             Total = total,
             Results = await results.AsNoTracking().ToListAsync(cancellationToken)
         };
-
     }
 
     public virtual async Task<IEnumerable<TModel>> GetListAsync(bool orderDesc = true,
@@ -135,6 +134,10 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
 
         return model;
     }
+
+    public virtual Task<TModel?> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
+        => UpdateAsync(model, cancellationToken, default);
+    
 
     public virtual async Task<TModel?> GetByIdAsync(Guid id,
         bool asNotTraking = false,
@@ -198,5 +201,10 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         }
 
         return await result.AnyAsync(cancellationToken);
+    }
+
+    public Task<TModel?> GetOneAsync(Expression<Func<TModel, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return _context.Set<TModel>().FirstOrDefaultAsync(expression, cancellationToken);
     }
 }

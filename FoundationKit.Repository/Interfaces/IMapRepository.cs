@@ -71,6 +71,7 @@ public interface IMapRepository<TInputModel, TEditModel, TDtoModel>
     /// <param name="verifyEntity">flag indating if find the entity or omit the find</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
     Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default, bool verifyEntity = true);
+    Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default);
 
 
     /// <summary>
@@ -109,6 +110,14 @@ public interface IMapRepository<TInputModel, TEditModel, TDtoModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>bool</returns>
     Task<bool> Exist(Expression<Func<TDtoModel, bool>>? expression = default, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Filter one if exist
+    /// </summary>
+    /// <param name="expression">Can use by filter data for any property of class</param>
+    /// <param name="cancellationToken">cancellationToken</param>
+    /// <returns>bool</returns>
+    Task<TDtoModel?> GetOneAsync(Expression<Func<TDtoModel, bool>> expression, CancellationToken cancellationToken = default);
+
 
     /// <summary>
     /// Count the entity in the db
