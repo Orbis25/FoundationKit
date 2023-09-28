@@ -67,7 +67,7 @@ public interface IBaseRepository<TModel>
     /// <param name="verifyEntity">flag indating if find the entity or omit the find</param>
     /// <returns>Return a new object mapped to <c>TDtoModel</c></returns>
     Task<TModel?> UpdateAsync(TModel model,  CancellationToken cancellationToken = default, bool verifyEntity = true);
-
+    Task<TModel?> UpdateAsync(TModel model, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get a entity
@@ -105,6 +105,13 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken">cancellationToken</param>
     /// <returns>bool</returns>
     Task<bool> ExistAsync(Expression<Func<TModel, bool>>? expression = default, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Filter one if exist
+    /// </summary>
+    /// <param name="expression">Can use by filter data for any property of class</param>
+    /// <param name="cancellationToken">cancellationToken</param>
+    /// <returns>bool</returns>
+    Task<TModel?> GetOneAsync(Expression<Func<TModel, bool>> expression, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Count the entity in the db
