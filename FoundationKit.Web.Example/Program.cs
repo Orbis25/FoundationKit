@@ -1,3 +1,4 @@
+using FoundationKit.Extensions;
 using FoundationKit.Web.Example.Application.interfaces;
 using FoundationKit.Web.Example.Domain.Persistence;
 using FoundationKit.Web.Example.Infraestructure.Services;
@@ -16,6 +17,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(builder.Con
 builder.Services.AddScoped<IPersonService, PersonService>();
 
 
+builder.Services.AddFoundationKitEncryptor(new()
+{
+    PublicKey = "",
+    PrivateKey = ""
+});
 
 var app = builder.Build();
 

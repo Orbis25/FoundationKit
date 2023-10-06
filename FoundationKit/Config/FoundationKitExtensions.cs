@@ -58,4 +58,32 @@ public static class FoundationKitExtensions
     }
 
 
+    /// <summary>
+    /// Add RsaEncryptor config
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="options">options with privateKey and publicKey</param>
+    /// <returns></returns>
+    public static IServiceCollection AddFoundationKitEncryptor(this IServiceCollection services, EncryptorOption options,
+        ServiceLifetime lifetime = ServiceLifetime.Singleton)
+    {
+
+        switch (lifetime)
+        {
+            case ServiceLifetime.Singleton:
+                services.TryAddSingleton(provider => options);
+                break;
+            case ServiceLifetime.Transient:
+                services.TryAddTransient(provider => options);
+                break;
+            default:
+                services.TryAddScoped(provider => options);
+                break;
+        }
+
+
+        services.AddScoped<IEncryptorService, EncryptorService>();
+
+        return services;
+    }
 }
