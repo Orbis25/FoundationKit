@@ -1,3 +1,4 @@
+using Foundationkit.Middlewares;
 using FoundationKit.Extensions;
 using System.Reflection;
 
@@ -14,6 +15,12 @@ builder.Services.AddSwaggerGen();
 //foundation kit config
 builder.Services.AddFoundationKitIdentityWithMapper<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
 
+builder.Services.AddFoundationKitEncryptor(new()
+{
+    PublicKey = "",
+    PrivateKey = "",
+    HeaderAes = "AES"
+});
 
 //database with postgres
 builder.Services.AddDbContext<ApplicationIdentityDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
@@ -36,41 +43,45 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-app.MapPost("/api/person", async ([FromServices] IPersonService service,
-    Person person,
-    CancellationToken cancellationToken) =>
-{
-    return await service.CreateAsync(person, cancellationToken);
-})
-.WithName("add");
-
-app.MapPut("/api/person", async ([FromServices] IPersonService service,
-    Person person,
-    CancellationToken cancellationToken) =>
-{
-    return await service.UpdateAsync(person, cancellationToken);
-})
-.WithName("update");
-
-app.MapGet("/api/person", async (
-    [FromServices] IPersonService service,
-    CancellationToken cancellationToken) =>
-{
-    return await service.GetListAsync(cancellationToken: cancellationToken);
-})
-.WithName("get all");
+app.UseMiddleware<FoundationKitAesEncryptorMiddleware>();
 
 
-app.MapGet("/api/person/{id}", async (
-    [FromServices] IPersonService service,
-    Guid id,
-    CancellationToken cancellationToken
-    ) =>
-{
-    return await service.GetByIdAsync(id, cancellationToken: cancellationToken);
-})
-.WithName("get one");
+
+
+//app.MapPost("/api/person", async ([FromServices] IPersonService service,
+//    Person person,
+//    CancellationToken cancellationToken) =>
+//{
+//    return await service.CreateAsync(person, cancellationToken);
+//})
+//.WithName("add");
+
+//app.MapPut("/api/person", async ([FromServices] IPersonService service,
+//    Person person,
+//    CancellationToken cancellationToken) =>
+//{
+//    return await service.UpdateAsync(person, cancellationToken);
+//})
+//.WithName("update");
+
+//app.MapGet("/api/person", async (
+//    [FromServices] IPersonService service,
+//    CancellationToken cancellationToken) =>
+//{
+//    return await service.GetListAsync(cancellationToken: cancellationToken);
+//})
+//.WithName("get all");
+
+
+//app.MapGet("/api/person/{id}", async (
+//    [FromServices] IPersonService service,
+//    Guid id,
+//    CancellationToken cancellationToken
+//    ) =>
+//{
+//    return await service.GetByIdAsync(id, cancellationToken: cancellationToken);
+//})
+//.WithName("get one");
 
 
 app.MapControllers();
