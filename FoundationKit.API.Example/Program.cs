@@ -43,7 +43,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<FoundationKitAesEncryptorMiddleware>();
+//for middleware encrypt
+//app.UseMiddleware<FoundationKitAesEncryptorMiddleware>();
 
 
 
