@@ -1,6 +1,7 @@
 using Foundationkit.Middlewares;
 using FoundationKit.Extensions;
 using System.Reflection;
+using FoundationKit.Domain.Option;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// FoundationKitStaticOptions.DateUtc = true;
 //foundation kit config
 builder.Services.AddFoundationKitIdentityWithMapper<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
 

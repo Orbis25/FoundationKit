@@ -1,11 +1,9 @@
-﻿namespace FoundationKit.Domain.Persistence;
+﻿using FoundationKit.Domain.Option;
 
-public abstract class FoundationKitDbContext : DbContext
+namespace FoundationKit.Domain.Persistence;
+
+public abstract class FoundationKitDbContext(DbContextOptions options) : DbContext(options)
 {
-    protected FoundationKitDbContext(DbContextOptions options) : base(options)
-    {
-
-    }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entity in ChangeTracker.Entries<BaseModel>())
@@ -13,10 +11,10 @@ public abstract class FoundationKitDbContext : DbContext
             switch (entity.State)
             {
                 case EntityState.Modified:
-                    entity.Entity.UpdatedAt = DateTime.Now;
+                    entity.Entity.UpdatedAt = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
                 case EntityState.Added:
-                    entity.Entity.CreatedAt = DateTime.Now;
+                    entity.Entity.CreatedAt =  FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
             }
         }
@@ -31,10 +29,10 @@ public abstract class FoundationKitDbContext : DbContext
             switch (entity.State)
             {
                 case EntityState.Modified:
-                    entity.Entity.UpdatedAt = DateTime.Now;
+                    entity.Entity.UpdatedAt = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
                 case EntityState.Added:
-                    entity.Entity.CreatedAt = DateTime.Now;
+                    entity.Entity.CreatedAt = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
             }
         }
