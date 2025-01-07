@@ -4,6 +4,7 @@ using FoundationKit.Core.Controllers;
 using FoundationKit.Helpers.Encryptor;
 using FoundationKit.Infrastructure.Interfaces;
 using System.Security.Cryptography;
+using FoundationKit.Domain.Option;
 
 namespace FoundationKit.API.Example.Controllers;
 
@@ -11,6 +12,7 @@ public class PeopleController : ApiMapController<IPersonMapService, PersonDto, P
 {
     private readonly IPersonMapService _service;
     private readonly IEncryptorService _encryptor;
+
     public PeopleController(IPersonMapService service, IEncryptorService encryptor) : base(service)
     {
         _service = service;
@@ -18,6 +20,11 @@ public class PeopleController : ApiMapController<IPersonMapService, PersonDto, P
     }
 
 
+    [HttpPost("/date")]
+    public async Task<IActionResult> date()
+    {
+        return Ok(new { DateUtc = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now });
+    }
 
     [HttpPost("/test")]
     public async Task<IActionResult> Test([FromBody] AesConfig config)
