@@ -1,12 +1,11 @@
-﻿namespace FoundationKit.Domain.Persistence;
+﻿using FoundationKit.Domain.Option;
 
-public abstract class FoundationKitIdentityDbContext<TUser> :
-    IdentityDbContext<TUser> where TUser : IdentityUser
+namespace FoundationKit.Domain.Persistence;
+
+public abstract class FoundationKitIdentityDbContext<TUser>(DbContextOptions options) :
+    IdentityDbContext<TUser>(options)
+    where TUser : IdentityUser
 {
-    protected FoundationKitIdentityDbContext(DbContextOptions options) : base(options)
-    {
-    }
-
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entity in ChangeTracker.Entries<BaseModel>())
@@ -14,10 +13,10 @@ public abstract class FoundationKitIdentityDbContext<TUser> :
             switch (entity.State)
             {
                 case EntityState.Modified:
-                    entity.Entity.UpdatedAt = DateTime.Now;
+                    entity.Entity.UpdatedAt = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
                 case EntityState.Added:
-                    entity.Entity.CreatedAt = DateTime.Now;
+                    entity.Entity.CreatedAt =  FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
             }
         }
@@ -29,13 +28,13 @@ public abstract class FoundationKitIdentityDbContext<TUser> :
     {
         foreach (var entity in ChangeTracker.Entries<BaseModel>())
         {
-            switch (entity.State)   
+            switch (entity.State)
             {
                 case EntityState.Modified:
-                    entity.Entity.UpdatedAt = DateTime.Now;
+                    entity.Entity.UpdatedAt = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
                 case EntityState.Added:
-                    entity.Entity.CreatedAt = DateTime.Now;
+                    entity.Entity.CreatedAt = FoundationKitStaticOptions.DateUtc ? DateTime.UtcNow : DateTime.Now;
                     break;
             }
         }
