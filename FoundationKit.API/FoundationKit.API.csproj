@@ -11,7 +11,7 @@
         <RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Version>4.0.3</Version>
+        <Version>4.0.4</Version>
         <IsPackable>true</IsPackable>
         <PackageTags>FoundationKit</PackageTags>
     </PropertyGroup>
@@ -25,6 +25,10 @@
         <None Update="icon.png">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
+        </None>
+        <None Update="icon.png">
+          <Pack>True</Pack>
+          <PackagePath>/</PackagePath>
         </None>
     </ItemGroup>
 
