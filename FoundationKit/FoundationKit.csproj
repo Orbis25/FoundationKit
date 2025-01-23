@@ -12,7 +12,7 @@
 		<RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>4.0.2</Version>
+		<Version>4.0.3</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -24,6 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.3.0" />
 		<ProjectReference Include="..\FoundationKit.Domain\FoundationKit.Domain.csproj" />
 		<ProjectReference Include="..\Foundationkit.Extensions\Foundationkit.Extensions.csproj" />
 		<ProjectReference Include="..\FoundationKit.Repository\FoundationKit.Repository.csproj" />
