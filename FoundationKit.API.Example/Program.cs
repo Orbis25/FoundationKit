@@ -1,6 +1,7 @@
 using Foundationkit.Middlewares;
 using FoundationKit.Extensions;
 using System.Reflection;
+using FoundationKit.API.Extensions;
 using FoundationKit.Domain.Option;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -44,6 +45,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseFoundationKitApiHandlers(Assembly.GetExecutingAssembly());
 
 //for middleware encrypt
 //app.UseMiddleware<FoundationKitAesEncryptorMiddleware>();

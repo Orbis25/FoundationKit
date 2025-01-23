@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundationkit.Extensions", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoundationKit.Web.Example", "FoundationKit.Web.Example\FoundationKit.Web.Example.csproj", "{CAF2AE94-755F-416D-946D-83798A6E2C12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoundationKit.API", "FoundationKit.API\FoundationKit.API.csproj", "{C515BFEB-11D0-49FF-86AB-5A7A62C4DE12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{CAF2AE94-755F-416D-946D-83798A6E2C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAF2AE94-755F-416D-946D-83798A6E2C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAF2AE94-755F-416D-946D-83798A6E2C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C515BFEB-11D0-49FF-86AB-5A7A62C4DE12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C515BFEB-11D0-49FF-86AB-5A7A62C4DE12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C515BFEB-11D0-49FF-86AB-5A7A62C4DE12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C515BFEB-11D0-49FF-86AB-5A7A62C4DE12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

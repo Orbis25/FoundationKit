@@ -1,0 +1,6 @@
+@FoundationKit.API_HostAddress = http://localhost:5128
+
+GET {{FoundationKit.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
