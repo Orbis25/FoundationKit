@@ -40,15 +40,15 @@ builder.Services.AddDbContext<ApplicationIdentityDbContext>(x => x.UseNpgsql(bui
 builder.Services.AddScoped<IPersonMapService, PersonMapService>();
 
 //event bus rabbitmq
-// builder.Services.AddEvents(new()
-// {
-//     Url = Environment.GetEnvironmentVariable("RABBITMQ_URL"),
-//     DefaultExchange = "API-EXAMPLE-EXCHANGE",
-//     QueuePrefix = "API-EXAMPLE"
-// });
-//
-// builder.Services.AddSubscriber<TestEvent>();
-//
+builder.Services.AddEvents(new()
+{
+    Url = Environment.GetEnvironmentVariable("RABBITMQ_URL"),
+    DefaultExchange = "API-EXAMPLE-EXCHANGE",
+    QueuePrefix = "API-EXAMPLE"
+});
+
+builder.Services.AddSubscriber<TestEvent>();
+
 
 var app = builder.Build();
 

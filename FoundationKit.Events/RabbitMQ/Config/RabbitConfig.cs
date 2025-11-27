@@ -15,5 +15,5 @@ public class RabbitConfig
     
     public ExchangeType DefaultExchangeType { get; set; } = ExchangeType.Topic;
     public bool RedeliverUnackedMessages { get; set; } = true;
-    public required string? QueuePrefix { get; set; }
+    public required string QueuePrefix { get; set; }
 }

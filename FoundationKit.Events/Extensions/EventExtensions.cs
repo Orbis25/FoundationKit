@@ -16,13 +16,13 @@ public static class EventExtensions
         RabbitConfig configuration)
     {
         var connectionFactory = GetConnectionFactory(configuration);
-        var conn =  connectionFactory.CreateConnectionAsync().Result;
+        var conn =  connectionFactory.CreateConnectionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         var channel = conn.CreateChannelAsync().Result;
-        Console.WriteLine("RabbitMQ Connected");
-
+        
         services.AddSingleton(conn);
         services.AddSingleton(channel);
         services.AddSingleton(configuration);
+        services.AddSingleton<RabbitTopologyRegistry>();
         
         services.AddScoped<IRabbitMessageBroker,RabbitMessageBroker>();
         
@@ -35,27 +35,15 @@ public static class EventExtensions
 
     public static IServiceCollection AddSubscriber<T>(this IServiceCollection services, string? exchange = null) where T: IMessage
     {
-        var configuration = services.BuildServiceProvider().GetService<RabbitConfig>();
-        var channel = services.BuildServiceProvider().GetService<IChannel>();
-        
-        var name = typeof(T).Name;
-        try
+        services.AddSingleton<QueueDefinition>(sp => 
         {
-            exchange = !string.IsNullOrEmpty(exchange) ? exchange : configuration?.DefaultExchange ?? "DEAD-EXCHANGE";
-
-            name = $"{configuration?.QueuePrefix}:{name}";
-            channel.QueueDeclareAsync(name,false, false, false, null)
-                .GetAwaiter().GetResult();
+            var config = sp.GetRequiredService<RabbitConfig>();
+            var typeName = typeof(T).Name;
+            var finalExchange = !string.IsNullOrEmpty(exchange) ? exchange : config.DefaultExchange;
+            var queueName = $"{config.QueuePrefix}:{typeName}";
             
-            channel.QueueBindAsync(name, exchange,name, null)
-                .GetAwaiter().GetResult();
-            
-            Console.WriteLine($"Subscriber registered for {name}");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Error registering subscriber: " + e.Message + $"-> name:" + name);
-        }
+            return new(finalExchange, queueName, queueName);
+        });
         
         return services;
     }

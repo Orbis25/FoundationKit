@@ -2,8 +2,8 @@ namespace FoundationKit.Events.RabbitMQ.Messages;
 
 public sealed class EventMessage<T> : IEventMessage<T> where T : IMessage
 {
-    public string? MessageId { get; }
-    public string? MessageName { get; }
+    public string MessageId { get; }
+    public string MessageName { get; }
     public DateTime CreatedAt { get; }
     
     public object GetData() => Data;

@@ -2,8 +2,8 @@ namespace FoundationKit.Events.RabbitMQ.Handlers;
 
 public sealed class HandlerInfo
 {
-    public Type HandlerType { get; set; }
-    public Type MessageType { get; set; }
+    public Type HandlerType { get; set; } = null!;
+    public Type MessageType { get; set; } = null!;
     
 }
 

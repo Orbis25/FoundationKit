@@ -8,4 +8,9 @@ public interface IRabbitMessageBroker
         string? exchangeName = null,
         string? routingKey = null,
         CancellationToken cancellationToken = default) where TMessage : IMessage;
+
+    Task PublishAsync<TMessage>(IEnumerable<TMessage> messages,
+        string? exchangeName = null,
+        string? routingKey = null,
+        CancellationToken cancellationToken = default) where TMessage : IMessage;
 }

@@ -60,12 +60,21 @@ public class RabbitMessageBroker: IRabbitMessageBroker
         }
         catch (Exception e)
         {
-            _logger.LogError("Error publish message", e.InnerException?.Message ?? e.Message);
+            _logger.LogError("Error publish message {ERROR}", e.InnerException?.Message ?? e.Message);
             throw new PublishException("Error trying publish a message please, check rabbitMQ connection", e);
         }
     }
-    
-    
+
+    public async Task PublishAsync<TMessage>(IEnumerable<TMessage> messages, 
+        string? exchangeName = null, 
+        string? routingKey = null, 
+        CancellationToken cancellationToken = default) where TMessage : IMessage
+    {
+        foreach (var message in messages)
+        {
+            await PublishAsync(message, exchangeName, routingKey, cancellationToken);
+        }
+    }
 
     private static EventMetadata GetMetadata() => new(Guid.NewGuid().ToString(), DateTime.UtcNow);
 }
