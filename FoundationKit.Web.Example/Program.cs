@@ -1,3 +1,4 @@
+using FoundationKit.Events.Extensions;
 using FoundationKit.Extensions;
 using FoundationKit.Web.Example.Application.interfaces;
 using FoundationKit.Web.Example.Domain.Persistence;
@@ -8,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 
 
 //database without identity

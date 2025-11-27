@@ -15,6 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\FoundationKit.Events\FoundationKit.Events.csproj" />
 	  <ProjectReference Include="..\FoundationKit\FoundationKit.csproj" />
 	</ItemGroup>
 </Project>
