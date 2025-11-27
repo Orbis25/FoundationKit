@@ -145,7 +145,7 @@ public class RabbitMqConsumerService : BackgroundService
                         cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch
             {
                 _logger.LogError("Error declaring consumers: Queue:{ErrorMessage}", def.QueueName);
             }
