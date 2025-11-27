@@ -4,7 +4,9 @@ using FoundationKit.Core.Controllers;
 using FoundationKit.Helpers.Encryptor;
 using FoundationKit.Infrastructure.Interfaces;
 using System.Security.Cryptography;
+using FoundationKit.API.Example.Events;
 using FoundationKit.Domain.Option;
+using FoundationKit.Events.RabbitMQ.Services;
 
 namespace FoundationKit.API.Example.Controllers;
 
@@ -51,5 +53,13 @@ public class PeopleController : ApiMapController<IPersonMapService, PersonDto, P
             Key = Convert.ToBase64String(aes.Key),
         };
         return Ok(_encryptor.EncryptCore(r));
+    }
+    
+    [HttpGet("test-events")]
+    public async Task<IActionResult> TestEvents([FromServices] IRabbitMessageBroker messageBroker)
+    {
+        await messageBroker.PublishAsync(new TestEvent() { Name = "Jhon Doe" });
+        
+        return Ok();
     }
 }

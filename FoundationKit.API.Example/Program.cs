@@ -1,8 +1,12 @@
 using Foundationkit.Middlewares;
 using FoundationKit.Extensions;
 using System.Reflection;
+using FoundationKit.API.Example.Events;
 using FoundationKit.API.Extensions;
 using FoundationKit.Domain.Option;
+using FoundationKit.Events.Extensions;
+using FoundationKit.Events.RabbitMQ.Messages;
+using FoundationKit.Events.RabbitMQ.Services;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -34,6 +38,17 @@ builder.Services.AddDbContext<ApplicationIdentityDbContext>(x => x.UseNpgsql(bui
 //service
 //builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IPersonMapService, PersonMapService>();
+
+//event bus rabbitmq
+builder.Services.AddEvents(new()
+{
+    Url = Environment.GetEnvironmentVariable("RABBITMQ_URL"),
+    DefaultExchange = "API-EXAMPLE-EXCHANGE",
+    QueuePrefix = "API-EXAMPLE"
+});
+
+builder.Services.AddSubscriber<TestEvent>();
+
 
 var app = builder.Build();
 
