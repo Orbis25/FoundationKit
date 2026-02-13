@@ -135,5 +135,16 @@ public interface IMapRepository<TInputModel, TEditModel, TDtoModel>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<string?> CommitAndResultAsync(CancellationToken cancellationToken = default);
+}
 
+
+public interface IMapRepository<T,TInputModel, TEditModel, TDtoModel> 
+    : IMapRepository<TInputModel, TEditModel, TDtoModel>
+    where TDtoModel : BaseOutput
+    where TInputModel : BaseInput
+    where TEditModel : BaseEdit
+    where T : BaseModel
+{
+    IQueryable<T> GetEntities(Expression<Func<T,bool>>? expression = null);
+    Task UpdatePartialEntityAsync(T entity, List<Expression<Func<T,object?>>> updateExpression, CancellationToken cancellationToken = default);
 }

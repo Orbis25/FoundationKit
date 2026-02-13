@@ -11,11 +11,11 @@ public class PersonService : BaseRepository<ApplicationDbContext, Person>, IPers
 }
 
 
-public class PersonMapService
-    : MapRepository<ApplicationIdentityDbContext, Person, PersonInput, PersonEdit, PersonDto>,
-    IPersonMapService
-{
-    public PersonMapService(ApplicationIdentityDbContext context, IMapper mapper) : base(context, mapper)
-    {
-    }
-}
+// public class PersonMapService
+//     : MapRepository<ApplicationIdentityDbContext, Person, PersonInput, PersonEdit, PersonDto>,
+//     IPersonMapService
+// {
+//     public PersonMapService(ApplicationIdentityDbContext context, IMapper mapper) : base(context, mapper)
+//     {
+//     }
+// }

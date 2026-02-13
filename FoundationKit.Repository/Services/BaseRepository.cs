@@ -46,6 +46,17 @@ public abstract class BaseRepository<TContext, TModel> : IBaseRepository<TModel>
         }
     }
 
+    public async Task UpdatePartialEntityAsync(TModel entity, List<Expression<Func<TModel, object?>>> updateExpression, CancellationToken cancellationToken = default)
+    {
+        var entry = _context.Entry(entity);
+        foreach (var property in updateExpression)
+        {
+            entry.Property(property).IsModified = true;
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public virtual async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default)
     {
         _context.Set<TModel>().Add(model);
