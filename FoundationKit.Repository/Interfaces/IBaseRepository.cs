@@ -128,4 +128,13 @@ public interface IBaseRepository<TModel>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<string?> CommitAndResultAsync(CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// update a partial entity, only the properties that are in the updateExpression list will be updated, the rest of the properties will be ignored
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="updateExpression"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task UpdatePartialEntityAsync(TModel entity, List<Expression<Func<TModel,object?>>> updateExpression, CancellationToken cancellationToken = default);
 }

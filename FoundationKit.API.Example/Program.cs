@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen();
 
 // FoundationKitStaticOptions.DateUtc = true;
 //foundation kit config
-builder.Services.AddFoundationKitIdentityWithMapper<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
+// builder.Services.AddFoundationKitIdentityWithMapper<User, ApplicationIdentityDbContext>(Assembly.GetExecutingAssembly());
 
 builder.Services.AddFoundationKitEncryptor(new()
 {
@@ -30,24 +30,26 @@ builder.Services.AddFoundationKitEncryptor(new()
 });
 
 //database with postgres
-builder.Services.AddDbContext<ApplicationIdentityDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
+// builder.Services.AddDbContext<ApplicationIdentityDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
 
 //database without identity
-//builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
+builder.Services.AddFoundationKit(Assembly.GetExecutingAssembly());
+builder.Services.AddDbContext<ApplicationDbContext>(x =>
+    x.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
 
 //service
-//builder.Services.AddScoped<IPersonService, PersonService>();
-builder.Services.AddScoped<IPersonMapService, PersonMapService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
+// builder.Services.AddScoped<IPersonMapService, PersonMapService>();
 
 //event bus rabbitmq
-builder.Services.AddEvents(new()
-{
-    Url = Environment.GetEnvironmentVariable("RABBITMQ_URL"),
-    DefaultExchange = "API-EXAMPLE-EXCHANGE",
-    QueuePrefix = "API-EXAMPLE"
-});
+// builder.Services.AddEvents(new()
+// {
+//     Url = Environment.GetEnvironmentVariable("RABBITMQ_URL"),
+//     DefaultExchange = "API-EXAMPLE-EXCHANGE",
+//     QueuePrefix = "API-EXAMPLE"
+// });
 
-builder.Services.AddSubscriber<TestEvent>();
+// builder.Services.AddSubscriber<TestEvent>();
 
 
 var app = builder.Build();
@@ -67,23 +69,22 @@ app.UseFoundationKitApiHandlers(Assembly.GetExecutingAssembly());
 //app.UseMiddleware<FoundationKitAesEncryptorMiddleware>();
 
 
+app.MapPost("/api/person/add", async ([FromServices] IPersonService service,
+        Person person,
+        CancellationToken cancellationToken) =>
+    {
+        return await service.CreateAsync(person, cancellationToken);
+    })
+    .WithName("add");
 
-
-//app.MapPost("/api/person", async ([FromServices] IPersonService service,
-//    Person person,
-//    CancellationToken cancellationToken) =>
-//{
-//    return await service.CreateAsync(person, cancellationToken);
-//})
-//.WithName("add");
-
-//app.MapPut("/api/person", async ([FromServices] IPersonService service,
-//    Person person,
-//    CancellationToken cancellationToken) =>
-//{
-//    return await service.UpdateAsync(person, cancellationToken);
-//})
-//.WithName("update");
+app.MapPut("/api/person/update", async ([FromServices] IPersonService service,
+        Person person,
+        CancellationToken cancellationToken) =>
+    {
+        await service.UpdatePartialEntityAsync(person, [x => x.Name], cancellationToken);
+        return Results.Ok();
+    })
+    .WithName("update");
 
 //app.MapGet("/api/person", async (
 //    [FromServices] IPersonService service,
@@ -105,6 +106,6 @@ app.UseFoundationKitApiHandlers(Assembly.GetExecutingAssembly());
 //.WithName("get one");
 
 
-app.MapControllers();
+// app.MapControllers();
 
 app.Run();

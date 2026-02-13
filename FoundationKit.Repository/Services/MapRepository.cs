@@ -9,7 +9,7 @@
 /// <typeparam name="TEditModel">Represent the class children of BaseEditModel</typeparam>
 /// <typeparam name="TDtoModel">Represent the class children of BaseDtoModel</typeparam>
 public abstract class MapRepository<TContext, TEntity, TInputModel, TEditModel, TDtoModel> :
-    IMapRepository<TInputModel, TEditModel, TDtoModel>
+    IMapRepository<TEntity,TInputModel, TEditModel, TDtoModel>
     where TContext : DbContext
     where TEntity : BaseModel
     where TInputModel : BaseInput
@@ -219,4 +219,19 @@ public abstract class MapRepository<TContext, TEntity, TInputModel, TEditModel, 
     }
 
     public Task<TDtoModel?> Update(TEditModel model, CancellationToken cancellationToken = default) => Update(model, cancellationToken, default);
+    public IQueryable<TEntity> GetEntities(Expression<Func<TEntity, bool>>? expression = null)
+    {
+        return _context.Set<TEntity>().AsQueryable();
+    }
+
+    public async Task UpdatePartialEntityAsync(TEntity entity, List<Expression<Func<TEntity, object?>>> updateExpression, CancellationToken cancellationToken = default)
+    {
+        var entry = _context.Entry(entity);
+        foreach (var property in updateExpression)
+        {
+            entry.Property(property).IsModified = true;
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }
