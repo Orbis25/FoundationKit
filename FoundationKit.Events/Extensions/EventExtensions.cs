@@ -41,8 +41,8 @@ public static class EventExtensions
             var typeName = typeof(T).Name;
             var finalExchange = !string.IsNullOrEmpty(exchange) ? exchange : config.DefaultExchange;
             var queueName = $"{config.QueuePrefix}:{typeName}";
-            
-            return new(finalExchange, queueName, queueName);
+
+            return new(finalExchange, typeName, queueName);
         });
         
         return services;

@@ -72,13 +72,17 @@ public class RabbitMqConsumerService : BackgroundService
     {
         try
         {
-            var messageType = Type.GetType(ea.BasicProperties.Type ?? string.Empty);
-            if (messageType == null)
+            var matchingHandlers = _handlerContainer.Handlers
+                .Where(h => h.MessageType.Name == ea.BasicProperties.Type)
+                .ToList();
+
+            if (matchingHandlers.Count == 0)
             {
                 await _channel.BasicAckAsync(ea.DeliveryTag, false, cancellationToken);
                 return;
             }
 
+            var messageType = matchingHandlers[0].MessageType;
             var envelopeType = typeof(EventMessage<>).MakeGenericType(messageType);
             var @event = JsonSerializer.Deserialize(ea.Body.Span, envelopeType);
 
@@ -87,8 +91,7 @@ public class RabbitMqConsumerService : BackgroundService
                 using var scope = _serviceProvider.CreateScope();
 
                 //invoke handlers
-                foreach (var handlerInfo in _handlerContainer.Handlers
-                             .Where(h => h.MessageType == messageType))
+                foreach (var handlerInfo in matchingHandlers)
                 {
                     var handler = scope.ServiceProvider.GetRequiredService(handlerInfo.HandlerType);
                     var method = handlerInfo.HandlerType.GetMethod("HandleAsync",

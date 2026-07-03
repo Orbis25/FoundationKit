@@ -11,7 +11,7 @@
         <PackageProjectUrl>https://github.com/Orbis25/FoundationKit</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Orbis25/FoundationKit</RepositoryUrl>
         <PackageIcon>icon.png</PackageIcon>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
