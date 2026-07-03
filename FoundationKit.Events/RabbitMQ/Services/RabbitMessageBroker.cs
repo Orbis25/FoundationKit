@@ -41,17 +41,15 @@ public class RabbitMessageBroker: IRabbitMessageBroker
             {
                 CorrelationId = correlationId,
                 MessageId = messageId,
-                Type = typeof(TMessage).AssemblyQualifiedName,
+                Type = @event.MessageName,
                 Persistent = true,
                 ContentType = "application/json",
                 ContentEncoding = "utf-8"
             };
 
-            routingKey = !string.IsNullOrEmpty(routingKey) ? routingKey : @event.MessageName 
+            routingKey = !string.IsNullOrEmpty(routingKey) ? routingKey : @event.MessageName
                          ?? throw new InvalidOperationException("No routing key specified.");
 
-            routingKey = $"{_rabbitConfig.QueuePrefix}:{routingKey}";
-            
             var exchange = !string.IsNullOrEmpty(exchangeName) ? exchangeName : _rabbitConfig.DefaultExchange;
             
             await _channel.BasicPublishAsync(exchange, routingKey,false,props,payload, cancellationToken:cancellationToken)
