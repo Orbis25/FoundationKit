@@ -16,18 +16,28 @@ public static class EventExtensions
         RabbitConfig configuration)
     {
         var connectionFactory = GetConnectionFactory(configuration);
-        var conn =  connectionFactory.CreateConnectionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        var channel = conn.CreateChannelAsync().Result;
-        
-        services.AddSingleton(conn);
-        services.AddSingleton(channel);
+
         services.AddSingleton(configuration);
         services.AddSingleton<RabbitTopologyRegistry>();
-        
+
+        // ponytail: lazy connect, only touches RabbitMQ the first time something publishes or consumes,
+        // so a stopped broker doesn't block app startup or unrelated requests
+        services.AddSingleton<IConnection>(_ =>
+            connectionFactory.CreateConnectionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+
+        services.AddSingleton<IChannel>(sp =>
+        {
+            var connection = sp.GetRequiredService<IConnection>();
+            var channel = connection.CreateChannelAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            var exchangeType = configuration.DefaultExchangeType.GetDisplayName();
+            channel.ExchangeDeclareAsync(configuration.DefaultExchange, exchangeType)
+                .ConfigureAwait(false).GetAwaiter().GetResult();
+            return channel;
+        });
+
         services.AddScoped<IRabbitMessageBroker,RabbitMessageBroker>();
-        
-        DeclareExchangeAsync(channel, configuration).GetAwaiter().GetResult();
-        
+        services.AddScoped<MessageContext>();
+
         services.RegisterConsumers();
         
         return services;
@@ -65,15 +75,6 @@ public static class EventExtensions
 
         return connectionFactory;
 
-    }
-    
-    private static Task DeclareExchangeAsync(IChannel channel, RabbitConfig configuration)
-    {
-        var type = configuration.DefaultExchangeType.GetDisplayName();
-        return Task.Run(() =>
-        {
-            channel.ExchangeDeclareAsync(exchange: configuration.DefaultExchange, type);
-        });
     }
     
     private static IServiceCollection RegisterConsumers(this IServiceCollection services)
