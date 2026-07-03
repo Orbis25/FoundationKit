@@ -1,9 +1,9 @@
 using System.Reflection;
 using System.Text.Json;
 using FoundationKit.Events.RabbitMQ.Config;
-using FoundationKit.Events.RabbitMQ.Exceptions;
 using FoundationKit.Events.RabbitMQ.Handlers;
 using FoundationKit.Events.RabbitMQ.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -15,20 +15,18 @@ public class RabbitMqConsumerService : BackgroundService
 {
     private readonly ILogger<RabbitMqConsumerService> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IConnection _connection;
     private readonly HandlerContainer _handlerContainer;
     private readonly RabbitConfig _rabbitConfig;
     private readonly RabbitTopologyRegistry _topologyRegistry;
     private IChannel _channel = null!;
+    private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(5);
 
     public RabbitMqConsumerService(ILogger<RabbitMqConsumerService> logger,
-        IConnection connection,
         IServiceProvider serviceProvider,
         HandlerContainer handlerContainer,
         RabbitConfig rabbitConfig,
         RabbitTopologyRegistry topologyRegistry)
     {
-        _connection = connection;
         _logger = logger;
         _serviceProvider = serviceProvider;
         _handlerContainer = handlerContainer;
@@ -36,27 +34,32 @@ public class RabbitMqConsumerService : BackgroundService
         _topologyRegistry = topologyRegistry;
     }
 
+    // ponytail: retry loop instead of throwing, so a RabbitMQ that isn't up yet (or drops)
+    // doesn't stop the whole host — only this consumer stays idle until it reconnects
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        try
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken)
-                .ConfigureAwait(false);
+            try
+            {
+                var connection = _serviceProvider.GetRequiredService<IConnection>();
+                _channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken)
+                    .ConfigureAwait(false);
 
-            await _channel.BasicQosAsync(0, 10, false, stoppingToken);
+                await _channel.BasicQosAsync(0, 10, false, stoppingToken);
 
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += (model, ea) => HandleMessages(model, ea, stoppingToken);
+                var consumer = new AsyncEventingBasicConsumer(_channel);
+                consumer.ReceivedAsync += (model, ea) => HandleMessages(model, ea, stoppingToken);
 
-            await InitializeQueueAndConsumerAsync(consumer, stoppingToken).ConfigureAwait(false);
+                await InitializeQueueAndConsumerAsync(consumer, stoppingToken).ConfigureAwait(false);
 
-            await WaitUntilCancelledAsync(stoppingToken).ConfigureAwait(false);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error in RabbitMqConsumerService");
-            throw new ConsumerServiceException("Error creating a consumer channel please, check rabbitMQ connection",
-                e);
+                await WaitUntilCancelledAsync(stoppingToken).ConfigureAwait(false);
+            }
+            catch (Exception e) when (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogError(e, "RabbitMQ not available, retrying in {Delay}s", RetryDelay.TotalSeconds);
+                await Task.Delay(RetryDelay, stoppingToken).ConfigureAwait(false);
+            }
         }
     }
 
@@ -89,6 +92,8 @@ public class RabbitMqConsumerService : BackgroundService
             if (@event is IEventMessage eventMessage)
             {
                 using var scope = _serviceProvider.CreateScope();
+
+                scope.ServiceProvider.GetRequiredService<MessageContext>().MessageId = eventMessage.MessageId;
 
                 //invoke handlers
                 foreach (var handlerInfo in matchingHandlers)
@@ -126,12 +131,28 @@ public class RabbitMqConsumerService : BackgroundService
             {
                 _logger.LogInformation("Declaring queue: {QueueName}", def.QueueName);
 
+                var dlxExchange = $"{_rabbitConfig.DefaultExchange}.dlx";
+                var dlqName = $"{def.QueueName}.dlq";
+
+                await _channel.ExchangeDeclareAsync(dlxExchange, ExchangeType.Direct, durable: true,
+                    cancellationToken: cancellationToken).ConfigureAwait(false);
+
+                await _channel.QueueDeclareAsync(dlqName, durable: true, exclusive: false, autoDelete: false,
+                    cancellationToken: cancellationToken).ConfigureAwait(false);
+
+                await _channel.QueueBindAsync(dlqName, dlxExchange, routingKey: def.QueueName,
+                    cancellationToken: cancellationToken).ConfigureAwait(false);
+
                 await _channel.QueueDeclareAsync(
                     def.QueueName,
                     durable: true,
                     exclusive: false,
                     autoDelete: false,
-                    arguments: null,
+                    arguments: new Dictionary<string, object?>
+                    {
+                        ["x-dead-letter-exchange"] = dlxExchange,
+                        ["x-dead-letter-routing-key"] = def.QueueName
+                    },
                     cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 await _channel.QueueBindAsync(
