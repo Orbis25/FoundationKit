@@ -3,6 +3,7 @@ using System.Text.Json;
 using FoundationKit.Events.RabbitMQ.Config;
 using FoundationKit.Events.RabbitMQ.Handlers;
 using FoundationKit.Events.RabbitMQ.Messages;
+using Foundationkit.Extensions.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -133,6 +134,11 @@ public class RabbitMqConsumerService : BackgroundService
 
                 var dlxExchange = $"{_rabbitConfig.DefaultExchange}.dlx";
                 var dlqName = $"{def.QueueName}.dlq";
+
+                // ponytail: declare here too (idempotent) so a consumer-only service works even if
+                // nothing ever resolved the AddEvents IChannel singleton that also declares this
+                await _channel.ExchangeDeclareAsync(def.Exchange, _rabbitConfig.DefaultExchangeType.GetDisplayName(),
+                    durable: true, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 await _channel.ExchangeDeclareAsync(dlxExchange, ExchangeType.Direct, durable: true,
                     cancellationToken: cancellationToken).ConfigureAwait(false);
