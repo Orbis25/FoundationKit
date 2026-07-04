@@ -30,7 +30,7 @@ public static class EventExtensions
             var connection = sp.GetRequiredService<IConnection>();
             var channel = connection.CreateChannelAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             var exchangeType = configuration.DefaultExchangeType.GetDisplayName();
-            channel.ExchangeDeclareAsync(configuration.DefaultExchange, exchangeType)
+            channel.ExchangeDeclareAsync(configuration.DefaultExchange, exchangeType, durable: true)
                 .ConfigureAwait(false).GetAwaiter().GetResult();
             return channel;
         });
